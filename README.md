@@ -1,12 +1,12 @@
 # Relation-aware graph augmentation with geometric contrastive learning improves the domains identification from spatially resolved transcriptomics data  
 ## 1.Introduction  
-SpaNCL is based on graph augmentation and geometric contrastive learning to capture the latent representations of spots or cells. SpaNCL can effectively integrates gene expression and spatial location information of SRT data.  
+SpaGRA is based on graph augmentation and geometric contrastive learning to capture the latent representations of spots or cells. SpaGRA can effectively integrates gene expression and spatial location information of SRT data.  
 
-  For graph augmentation, SpaNCL employs spatial distance as prior knowledge and updates graph relationships with multi-head GATs. Then, SpaNCL utilizes geometric contrastive learning to enhance the discriminability of the latent embeddings. Furthermore, SpaNCL leverage these multi-view relationships to construct more rational negative samples, which can significantly increase the recognition capabilities of SpaNCL. The model is trained using contrastive loss, similarity constraint loss and ZINB loss. Ultimately, SpaNCL applies the learned embeddings to cluster spatial domains.   
+  For graph augmentation, SpaGRA employs spatial distance as prior knowledge and updates graph relationships with multi-head GATs. Then, SpaGRA utilizes geometric contrastive learning to enhance the discriminability of the latent embeddings. Furthermore, SpaGRA leverage these multi-view relationships to construct more rational negative samples, which can significantly increase the recognition capabilities of SpaGRA. The model is trained using contrastive loss, similarity constraint loss and ZINB loss. Ultimately, SpaGRA applies the learned embeddings to cluster spatial domains.   
 
-  The workflow of SpaNCL is shown in the following diagram.      
+  The workflow of SpaGRA is shown in the following diagram.      
   
-  ![image](https://github.com/sunxue-yy/SpaNCL/blob/main/workflow.png "workflow of SpaNCL")
+  ![image](https://github.com/sunxue-yy/SpaGRA/blob/main/workflow.png "workflow of SpaGRA")
   
 ## 2.Requirements  
 numpy==1.21.5  
@@ -54,13 +54,13 @@ obs_df = adata.obs.dropna()
 ARI = adjusted_rand_score(obs_df['SpaNCL'], obs_df['Ground Truth'])
 print('Adjusted rand index = %.2f' % ARI)
 
-sc.pp.neighbors(adata, use_rep='SpaNCL')
+sc.pp.neighbors(adata, use_rep='SpaGRA')
 sc.tl.umap(adata)
 plt.rcParams["figure.figsize"] = (3, 3)
-sc.pl.umap(adata, color=["SpaNCL", 'Ground Truth'], title=['SpaNCL (ARI=%.2f)' % ARI, 'Ground Truth'],save="SpaNCL_umap")
+sc.pl.umap(adata, color=["SpaGRA", 'Ground Truth'], title=['SpaGRA (ARI=%.2f)' % ARI, 'Ground Truth'],save="SpaGRA_umap")
 
 plt.rcParams["figure.figsize"] = (3, 3)
-sc.pl.spatial(adata, color=["SpaNCL", 'Ground Truth'], title=['SpaNCL (ARI=%.2f)' % ARI, 'Ground Truth'],save="SpaNCL")  
+sc.pl.spatial(adata, color=["SpaGRA", 'Ground Truth'], title=['SpaGRA (ARI=%.2f)' % ARI, 'Ground Truth'],save="SpaGRA")  
 ```
 ### Mouse embryo  
 ```python
@@ -73,12 +73,12 @@ sc.pp.log1p(adata)
 adata.obs['Ground Truth'] = adata.obs['annotation']
 
 Cal_Spatial_Net(adata, rad_cutoff=10)
-adata = train_model.train(adata,k=12,hidden_dims=500, n_epochs=200,num_hidden=400,lr=0.00005, key_added='SpaNCL',a=2,b=1,c=1,
+adata = train_model.train(adata,k=12,hidden_dims=500, n_epochs=200,num_hidden=400,lr=0.00005, key_added='SpaGRA',a=2,b=1,c=1,
                 radius=20,  weight_decay=0.0001,  random_seed=0,feat_drop=0.01,attn_drop=0.02,
                 negative_slope=0.02,heads=4,)
 
 Ann_df = adata.obs.dropna()
-ARI = adjusted_rand_score(Ann_df['SpaNCL'], Ann_df["annotation"])
+ARI = adjusted_rand_score(Ann_df['SpaGRA'], Ann_df["annotation"])
 print(ARI)
 
 coor = pd.DataFrame(adata.obsm['spatial'])
@@ -87,8 +87,8 @@ coor.columns = ['imagerow', 'imagecol']
 adata.obs["y_pixel"]=coor['imagerow']
 adata.obs["x_pixel"]=coor['imagecol']
 
-domains='SpaNCL'
-title = 'SpaNCL (ARI=%.2f)' % ARI
+domains='SpaGRA'
+title = 'SpaGRA (ARI=%.2f)' % ARI
 ax = sc.pl.scatter(adata, alpha=1, x="y_pixel", y="x_pixel", color=domains, legend_fontsize=18, show=False,
                    size=100000 / adata.shape[0])
 
@@ -97,7 +97,7 @@ ax.set_aspect('equal', 'box')
 ax.set_xticks([])
 ax.set_yticks([])
 ax.axes.invert_yaxis()
-plt.savefig("Data/SpaNCL_embroy.pdf")
+plt.savefig("Data/SpaGRA_embroy.pdf")
 plt.close()
 ```
 ### Visium HD  
@@ -111,7 +111,7 @@ sc.pp.normalize_per_cell(adata)
 sc.pp.log1p(adata)
 Cal_Spatial_Net(adata, rad_cutoff=150)
 
-adata = train_model.train(adata,k=7,hidden_dims=1000, n_epochs=200,num_hidden=600,lr=0.00005, key_added='SpaNCL',a=2,b=1,c=1,
+adata = train_model.train(adata,k=7,hidden_dims=1000, n_epochs=200,num_hidden=600,lr=0.00005, key_added='SpaGRA',a=2,b=1,c=1,
                 radius=0,  weight_decay=0.00001,  random_seed=0,feat_drop=0.02,attn_drop=0.01,
                 negative_slope=0.02,heads=4,)
 
@@ -121,8 +121,8 @@ coor.columns = ['imagerow', 'imagecol']
 adata.obs["x_pixel"]=coor['imagerow']
 adata.obs["y_pixel"]=coor['imagecol']
 
-domains='SpaNCL'
-title = 'SpaNCL'
+domains='SpaGRA'
+title = 'SpaGRA'
 ax = sc.pl.scatter(adata, alpha=1, x="x_pixel", y="y_pixel", color=domains, legend_fontsize=18, show=False,
                    size=100000 / adata.shape[0])
 ax.set_title(title, fontsize=23)
