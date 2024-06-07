@@ -35,7 +35,7 @@ https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-librari
 https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-human-crc   
 
 ## 4.Usage  
-### We provided some demos to demonstrate usage of SpaNCL.    
+### We provided some demos to demonstrate usage of SpaGRA.    
 ### Human breast cancer
 ```python  
 adata = sc.read_visium("Data/V1_Breast_Cancer_Block_A_Section_1",
