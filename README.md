@@ -10,7 +10,7 @@ For graph augmentation, SpaGRA employs spatial distance as prior knowledge and u
 
 The workflow of SpaGRA is shown in the following diagram.
 
-![image](https://github.com/sunxue-yy/SpaGRA/blob/main/workflow.jpg)
+![image](./workflow.jpg)
 
 
 
