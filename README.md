@@ -1,25 +1,31 @@
-# Relation-aware graph augmentation with geometric contrastive learning improves the domains identification from spatially resolved transcriptomics data  
-## 1.Introduction  
-SpaGRA is based on graph augmentation and geometric contrastive learning to capture the latent representations of spots or cells. SpaGRA can effectively integrates gene expression and spatial location information of SRT data.  
+# SpaGRA
 
-  For graph augmentation, SpaGRA employs spatial distance as prior knowledge and updates graph relationships with multi-head GATs. Then, SpaGRA utilizes geometric contrastive learning to enhance the discriminability of the latent embeddings. Furthermore, SpaGRA leverage these multi-view relationships to construct more rational negative samples, which can significantly increase the recognition capabilities of SpaGRA. The model is trained using contrastive loss, similarity constraint loss and ZINB loss. Ultimately, SpaGRA applies the learned embeddings to cluster spatial domains.   
+This repository contains the code for the paper "Relation-aware graph augmentation with geometric contrastive learning improves the domains identification from spatially resolved transcriptomics data."
 
-  The workflow of SpaGRA is shown in the following diagram.      
-  
-  ![image](https://github.com/sunxue-yy/SpaGRA/blob/main/workflow.png "workflow of SpaGRA")
-  
-## 2.Requirements  
-numpy==1.21.5  
-torch==1.11.0  
-pandas==1.3.5  
-numba==0.55.1  
-scanpy==1.9.1  
-scikit-learn==1.0.2  
-scipy==1.7.3  
-anndata==0.8.0  
+## Introduction
+
+SpaGRA is designed to capture the latent representations of spots or cells using graph augmentation and geometric contrastive learning. It effectively integrates gene expression and spatial location information from SRT data.
+
+For graph augmentation, SpaGRA employs spatial distance as prior knowledge and updates graph relationships using multi-head GATs. Following this, geometric contrastive learning is used to enhance the discriminability of the latent embeddings. SpaGRA also leverages these multi-view relationships to construct more rational negative samples, significantly increasing its discriminability. The model is trained using contrastive loss, similarity constraint loss, and ZINB loss. Ultimately, SpaGRA applies the learned embeddings to cluster spatial domains.
+
+The workflow of SpaGRA is shown in the following diagram.
+
+![image](https://github.com/sunxue-yy/SpaGRA/blob/main/workflow.jpg)
+
+
+
+## Requirements
+numpy==1.21.5
+torch==1.11.0
+pandas==1.3.5
+numba==0.55.1
+scanpy==1.9.1
+scikit-learn==1.0.2
+scipy==1.7.3
+anndata==0.8.0
 matplotlib==3.5.2
 
-## 3.Datasets
+## Datasets
 All datasets used in this paper are publicly available. Users can download them from the links below.  
 ### Human breast cancer  
 https://support.10xgenomics.com/spatial-gene-expression/datasets/1.1.0/V1_Breast_Cancer_Block_A_Section_1  
@@ -34,8 +40,10 @@ Processed datasets are also available at SODB (https://gene.ai.tencent.com/Spati
 https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-mouse-intestine  
 https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-human-crc   
 
-## 4.Usage  
-### We provided some demos to demonstrate usage of SpaGRA.    
+## Tutorial
+
+We provided some demos in paper to demonstrate usage of SpaGRA.    
+
 ### Human breast cancer
 ```python  
 adata = sc.read_visium("Data/V1_Breast_Cancer_Block_A_Section_1",
@@ -62,6 +70,8 @@ sc.pl.umap(adata, color=["SpaGRA", 'Ground Truth'], title=['SpaGRA (ARI=%.2f)' %
 plt.rcParams["figure.figsize"] = (3, 3)
 sc.pl.spatial(adata, color=["SpaGRA", 'Ground Truth'], title=['SpaGRA (ARI=%.2f)' % ARI, 'Ground Truth'],save="SpaGRA")  
 ```
+
+
 ### Mouse embryo  
 ```python
 adata = sc.read("Data/embroy/95.h5ad")
@@ -100,6 +110,8 @@ ax.axes.invert_yaxis()
 plt.savefig("Data/SpaGRA_embroy.pdf")
 plt.close()
 ```
+
+
 ### Visium HD  
 ```python
 adata = sc.read("Data/HD/HD2.h5ad")
@@ -133,3 +145,8 @@ ax.axes.invert_yaxis()
 plt.savefig("HD2.pdf")
 plt.close()
 ```
+
+
+## Citation
+
+The paper is under review...
