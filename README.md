@@ -15,27 +15,33 @@ The workflow of SpaGRA is shown in the following diagram.
 
 
 ## Requirements
-numpy==1.21.5
-torch==1.11.0
-pandas==1.3.5
-numba==0.55.1
-scanpy==1.9.1
-scikit-learn==1.0.2
-scipy==1.7.3
-anndata==0.8.0
-matplotlib==3.5.2
+numpy==1.21.5  
+torch==1.11.0  
+pandas==1.3.5  
+numba==0.55.1  
+scanpy==1.9.1  
+scikit-learn==1.0.2  
+scipy==1.7.3  
+anndata==0.8.0  
+matplotlib==3.5.2  
 
 ## Datasets
-All datasets used in this paper are publicly available. Users can download them from the links below.  
+All datasets used in this paper are publicly available. Users can download them from the links below.
+
+Some processed datasets are also available at SODB (https://gene.ai.tencent.com/SpatialOmics/) and can be loaded by PySODB (https://protocols-pysodb.readthedocs.io/en/latest/).  
+
 ### Human breast cancer  
 https://support.10xgenomics.com/spatial-gene-expression/datasets/1.1.0/V1_Breast_Cancer_Block_A_Section_1  
+
 ### Mouse hypothalamus  
 https://datadryad.org/stash/dataset/doi:10.5061/dryad.8t8s248  
+
 ### Mouse primary visual area  
 https://spacetx.github.io/data.html  
+
 ### Mouse embryo  
 https://db.cngb.org/stomics/mosta/  
-Processed datasets are also available at SODB (https://gene.ai.tencent.com/SpatialOmics/) and can be loaded by PySODB (https://protocols-pysodb.readthedocs.io/en/latest/).  
+
 ### Visium HD  
 https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-mouse-intestine  
 https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-human-crc   
