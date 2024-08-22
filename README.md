@@ -17,7 +17,7 @@ SpaGRA is implemented using Python 3.7.12 and Pytorch 1.11.0.
 Users can install SpaGRA through PyPI.  
 
 ### Install from PyPI  
-`pip3 install SpaGRA`
+`pip install SpaGRA`
 
 ### Requirements
 numpy==1.21.5  
@@ -34,7 +34,7 @@ matplotlib==3.5.2
 All datasets used in this paper are publicly available. Users can download them from the links below.
 
 Some processed datasets are also available at SODB (https://gene.ai.tencent.com/SpatialOmics/) and can be loaded by PySODB (https://protocols-pysodb.readthedocs.io/en/latest/).  
-
+    
 ### Human breast cancer  
 https://support.10xgenomics.com/spatial-gene-expression/datasets/1.1.0/V1_Breast_Cancer_Block_A_Section_1  
 
@@ -49,7 +49,10 @@ https://db.cngb.org/stomics/mosta/
 
 ### Visium HD  
 https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-mouse-intestine  
-https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-human-crc   
+https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-human-crc    
+
+### Annotations  
+Except for the Visium HD data, all domain annotations have been manually annotated in previously published papers, which can be downloaded from the above websites.
 
 ## Tutorial
 
