@@ -14,9 +14,10 @@ from sklearn import metrics
 from sklearn.cluster import KMeans
 import scanpy as sc
 import pandas as pd
+from sklearn.decomposition import PCA
 
 
-def train(adata,k=0,hidden_dims=3000, n_epochs=200,num_hidden=100,lr=0.00008, key_added='SpaGRA',a=0.5,b=5,c=2,
+def train(adata,k=0,hidden_dims=3000, n_epochs=100,num_hidden=100,lr=0.00008, key_added='SpaGRA',a=0.1,b=1,c=0.5,
                 radius=50,  weight_decay=0.0001,  random_seed=0,feat_drop=0.01,attn_drop=0.1,
                 negative_slope=0.01,heads=4,method="kmeans",reso=1,
                 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')):
@@ -88,13 +89,20 @@ def train(adata,k=0,hidden_dims=3000, n_epochs=200,num_hidden=100,lr=0.00008, ke
             idx = kmeans.labels_
             adata_Vars.obs['temp'] = idx
             obs_df = adata_Vars.obs.dropna()
-            ari_res = metrics.adjusted_rand_score(obs_df['temp'], obs_df['Ground Truth'])
-            # print("ARI:",ari_res,"MAX ARI:",ari_max)
-            if ari_res > ari_max:
-                ari_max = ari_res
-                idx_max = idx
-                mean_max = mean.to('cpu').detach().numpy()
-                emb_max = heads0.to('cpu').detach().numpy()
+
+            if 'Ground Truth' in obs_df.columns:
+                ari_res = metrics.adjusted_rand_score(obs_df['temp'], obs_df['Ground Truth'])
+                # print("ARI:",ari_res,"MAX ARI:",ari_max)
+                if ari_res > ari_max:
+                    ari_max = ari_res
+                    idx_max = idx
+                    mean_max = mean.to('cpu').detach().numpy()
+                    emb_max = heads0.to('cpu').detach().numpy()
+            else:
+                    idx_max = idx
+                    mean_max = mean.to('cpu').detach().numpy()
+                    emb_max = heads0.to('cpu').detach().numpy()
+
 
         if method == "louvain":
             adata_tmp = sc.AnnData(np.nan_to_num(heads0.cpu().detach()))
@@ -123,6 +131,8 @@ def train(adata,k=0,hidden_dims=3000, n_epochs=200,num_hidden=100,lr=0.00008, ke
     heads, pi, disp, mean = model(features)
     z = torch.cat(heads, axis=1)
     adata.obsm[key_added] = z.to('cpu').detach().numpy()
+    pca = PCA(n_components=50, random_state=0)
+    adata.obsm['emb_pca'] = pca.fit_transform(adata.obsm['emb'].copy())
 
     return adata
 
