@@ -75,3 +75,17 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
     values = torch.from_numpy(sparse_mx.data)
     shape = torch.Size(sparse_mx.shape)
     return torch.sparse.FloatTensor(indices, values, shape)
+
+def merge_anndatas(adata_list,batch_key="slide"):
+    combined_adata = adata_list[0].concatenate(adata_list[1:], join='outer', batch_key=batch_key)
+    spatial_nets = []
+    for i, adata in enumerate(adata_list):
+        if 'Spatial_Net' in adata.uns:
+            spatial_net = adata.uns['Spatial_Net'].copy()
+            spatial_net['Cell1'] = spatial_net['Cell1'] + '-' + str(i)
+            spatial_net['Cell2'] = spatial_net['Cell2'] + '-' + str(i)
+            spatial_nets.append(spatial_net)
+    if spatial_nets:
+        combined_spatial_net = pd.concat(spatial_nets, ignore_index=True)
+        combined_adata.uns['Spatial_Net'] = combined_spatial_net
+    return combined_adata
