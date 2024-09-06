@@ -1,5 +1,5 @@
 
-This repository contains the code for the paper "Relation-aware graph augmentation with geometric contrastive learning improves the domains identification from spatially resolved transcriptomics data."
+This repository contains the code for the paper "**Relation-aware graph augmentation with geometric contrastive learning improves the domains identification from spatially resolved transcriptomics data**".
 
 ## Introduction
 
@@ -56,7 +56,9 @@ Except for the Visium HD data, all domain annotations have been manually annotat
 
 ## Tutorial
 
-We provided some demos in paper to demonstrate usage of SpaGRA.    
+Here, we present two examples to illustrate the application of SpaGRA for spatial domain identification. We employed two datasets for this demonstration: **the Human Breast Cancer dataset** and **the Visium HD dataset**. 
+
+To ensure reproducibility and facilitate further exploration, we have made the code for case studies in our paper available in the "**benchmark**" folder of our repository.
 
 ### Human breast cancer  
 First, load the required packages and data.
@@ -79,21 +81,37 @@ from sklearn.metrics import normalized_mutual_info_score
 adata = sc.read_visium("Data/V1_Breast_Cancer_Block_A_Section_1",
                 count_file="V1_Breast_Cancer_Block_A_Section_1_filtered_feature_bc_matrix.h5")
 ```
+
 Next, the raw data is preprocessed.  
-This includes (1) Ensuring that gene names are unique. （2）Filtering out genes that are minimally expressed in different cells. (3) Identifying and retaining genes that are highly variable. （4）Data normalization and log transformation. （5）Adjacency matrix calculation.
-```
+
+
+```Python
+# Ensuring that gene names are unique
 adata.var_names_make_unique()  
+
+# Filtering out genes that are minimally expressed in different cells
 prefilter_genes(adata, min_cells=3)  
+
+# Identifying and retaining genes that are highly variable
 sc.pp.highly_variable_genes(adata, flavor="seurat_v3", n_top_genes=1000) 
+
+# Data normalization and log transformation
 sc.pp.normalize_per_cell(adata) 
 sc.pp.log1p(adata)
-Ann_df = pd.read_csv("Data/V1_Breast_Cancer_Block_A_Section_1/metadata.tsv", sep="	", header=0, na_filter=False,
-                     index_col=0)
+
+# Loading a metadata file (containing ground truth annotations)
+Ann_df = pd.read_csv("Data/V1_Breast_Cancer_Block_A_Section_1/metadata.tsv", sep="	", header=0, na_filter=False, index_col=0)
+
+# Adding the ground truth labels
 adata.obs['Ground Truth'] = Ann_df.loc[adata.obs_names, 'fine_annot_type']
+
+# Adjacency matrix calculation
 Cal_Spatial_Net(adata, rad_cutoff=400)  
 ```
+
 Finally, the model is trained and the clustering results are saved.
-```
+
+```Python
 adata = train_model.train(adata,k=20,n_epochs=200)
 obs_df = adata.obs.dropna()
 
@@ -114,10 +132,13 @@ sc.pl.spatial(adata, color=["SpaGRA", 'Ground Truth'], title=['SpaGRA (ARI=%.2f)
 
 
 
+### Visium HD
 
-### Visium HD    
+For this dataset, our data processing method is consistent with the approach used for the aforementioned dataset.
+
 First, load the required packages and data.
-```python
+
+```Python
 # Importing necessary libraries
 import os,csv,re
 import pandas as pd
@@ -134,8 +155,11 @@ from SpaGRA import train_model
 # Loading spatial transcriptomics data using Scanpy
 adata = sc.read("Data/HD/HD2.h5ad")
 ```
+
 Next, the raw data is preprocessed.  
-```
+
+
+```Python
 adata.var_names_make_unique()
 prefilter_genes(adata, min_cells=3) 
 sc.pp.highly_variable_genes(adata, flavor="seurat_v3", n_top_genes=1000)
