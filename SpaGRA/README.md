@@ -170,4 +170,4 @@ plt.close()
 
 ## Citation
 
-The paper is under review...
+Sun X, Zhang W, Li W, et al. SpaGRA: Graph augmentation facilitates domain identification for spatially resolved transcriptomics[J]. Journal of Genetics and Genomics, 2025, 52(1): 93-104.
